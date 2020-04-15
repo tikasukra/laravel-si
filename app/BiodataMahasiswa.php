@@ -21,6 +21,7 @@ class BiodataMahasiswa extends Model
     protected $fillable = [
     	"name",
     	"nim",
-    	"address"
+        "address",
+        "photo"
     ];
 }

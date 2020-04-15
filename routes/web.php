@@ -20,22 +20,26 @@ Route::post("/login", "LoginController@login")->name("login.login");
 
 Route::get("/logout", "LoginController@logout")->name("logout");
 
-// Route::middleware("auth")->group(function (){
 
+Route::prefix("biodata-mahasiswa")->middleware("auth")->name("biodata.")->group(function (){
 // list mahasiswa
-Route::get("/biodata-mahasiswa", "BiodataController@index")->name("biodata.index");
+Route::get("/", "BiodataController@index")->name("index");
 // detail mahasiswa
-Route::get("/biodata-mahasiswa/{id}/detail", "BiodataController@show")->name("biodata.show");
+Route::get("/{id}/detail", "BiodataController@show")->name("show");
 // create new data
-Route::get("/biodata-mahasiswa/create", "BiodataController@create")->name("biodata.create");
+Route::get("/create", "BiodataController@create")->name("create");
 // input data
-Route::post("/biodata-mahasiswa", "BiodataController@store")->name("biodata.store");
+Route::post("/", "BiodataController@store")->name("store");
 // edit data
-Route::get("/biodata-mahasiswa/{id}/edit", "BiodataController@edit")->name("biodata.edit");
+Route::get("/{id}/edit", "BiodataController@edit")->name("edit");
 // update data
-Route::post("/biodata-mahasiswa/{id}/update", "BiodataController@update")->name("biodata.update");
+Route::post("/{id}/update", "BiodataController@update")->name("update");
 // delete data
-Route::get("/biodata-mahasiswa/{id}/delete", "BiodataController@destroy")->name("biodata.destroy");
+Route::get("/{id}/delete", "BiodataController@destroy")->name("destroy");
 
-// });
+// export excel
+Route::get("/excel", "BiodataController@excel")->name("excel");
+});
+
+// Route::resource("biodata", "BiodataController");
 
