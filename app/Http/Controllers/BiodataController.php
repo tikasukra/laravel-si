@@ -7,13 +7,23 @@ use Illuminate\Http\Request;
 // import class lain
 // panggil class model
 use App\BiodataMahasiswa;
+use App\Exports\BiodataExport;
 use DB;
 use App\Http\Requests\UpdateBiodata;
 use App\User;
 use DataTables;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
 
 class BiodataController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware("auth");
+    // }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,13 +31,14 @@ class BiodataController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $mahasiswa = BiodataMahasiswa::all();
+
         if($request->ajax()){
             $mahasiswa = BiodataMahasiswa::latest()->get();
-            return DataTables::of($mahasiswa);
+            return DataTablesDataTables::of($mahasiswa);
         }
         
-        return view('biodata.index');
+        return view('biodata.index', compact("mahasiswa"));
     }
 
     /**
@@ -39,6 +50,10 @@ class BiodataController extends Controller
     {
         //
         return view("biodata.create");
+    }
+
+    public function excel(){
+        return Excel::download(new BiodataExport, 'biodata.xlsx');
     }
 
     /**
