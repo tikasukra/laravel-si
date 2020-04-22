@@ -39,6 +39,7 @@ Route::get("/{id}/delete", "BiodataController@destroy")->name("destroy");
 
 // export excel
 Route::get("/excel", "BiodataController@excel")->name("excel");
+
 });
 
 // Route::resource("biodata", "BiodataController");

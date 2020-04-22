@@ -10,11 +10,10 @@ use App\BiodataMahasiswa;
 use App\Exports\BiodataExport;
 use DB;
 use App\Http\Requests\UpdateBiodata;
-use App\User;
-use DataTables;
-use Yajra\DataTables\DataTables as DataTablesDataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
+use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Html\Builder;
 
 class BiodataController extends Controller
 {
@@ -29,16 +28,39 @@ class BiodataController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Builder $builder)
     {
-        $mahasiswa = BiodataMahasiswa::all();
-
-        if($request->ajax()){
-            $mahasiswa = BiodataMahasiswa::latest()->get();
-            return DataTablesDataTables::of($mahasiswa);
+        if(request()->ajax()){
+            return DataTables::of(BiodataMahasiswa::query())->editColumn("nim", function ($data) {
+                return "<strong><i>" . $data->nim . "</i></strong>";            
+            })->addColumn("action", function ($data) {
+                 return "
+                    <a href='" . route("biodata.show", ["id" => $data->id]) . "' class='btn btn-success'>Detail</a>
+                    <a href='" . route("biodata.edit", ["id" => $data->id]) . "' class='btn btn-warning'>Edit</a>
+                    <a href='" . route("biodata.destroy", ["id" => $data->id]) . "' class='btn btn-danger'>Delete</a>
+                 ";
+            })->rawColumns(["nim", "action"])->addIndexColumn()->toJson();
         }
-        
-        return view('biodata.index', compact("mahasiswa"));
+
+        $html = $builder->columns([
+            ["data" => "DT_RowIndex", "name" => "#", "title" => "#", "defaultContent" => "", "orderable" => false ],
+            ["data" => "name", "name" => "name", "title" => "NAMA"],
+            ["data" => "nim", "name" => "nim", "title" => "NIM"],
+            [
+                'defaultContent' => '',
+                'data'           => 'action',
+                'name'           => 'action',
+                'title'          => 'Action',
+                'render'         => null,
+                'orderable'      => false,
+                'searchable'     => false,
+                'exportable'     => false,
+                'printable'      => true,
+            ],
+        ]);
+
+        return view("biodata.index", compact("html"));
+
     }
 
     /**
