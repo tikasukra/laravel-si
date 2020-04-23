@@ -15,10 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get("/mail/send", "MailController@send");
+
 Route::get("/login", "LoginController@showLoginForm")->name("login");
 Route::post("/login", "LoginController@login")->name("login.login");
 
 Route::get("/logout", "LoginController@logout")->name("logout");
+
+
 
 
 Route::prefix("biodata-mahasiswa")->middleware("auth")->name("biodata.")->group(function (){
@@ -39,7 +44,11 @@ Route::get("/{id}/delete", "BiodataController@destroy")->name("destroy");
 
 // export excel
 Route::get("/excel", "BiodataController@excel")->name("excel");
+
+// send email
+
 });
+
 
 // Route::resource("biodata", "BiodataController");
 
