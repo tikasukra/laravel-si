@@ -43,7 +43,7 @@ class BiodataController extends Controller
         }
 
         $html = $builder->columns([
-            ["data" => "DT_RowIndex", "name" => "#", "title" => "#", "defaultContent" => "", "orderable" => false ],
+            ["data" => "DT_RowIndex", "name" => "#", "title" => "NO", "defaultContent" => "", "orderable" => false ],
             ["data" => "name", "name" => "name", "title" => "NAMA"],
             ["data" => "nim", "name" => "nim", "title" => "NIM"],
             [
